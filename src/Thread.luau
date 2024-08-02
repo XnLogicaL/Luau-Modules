@@ -48,11 +48,15 @@ end
 local exports = {}
 exports.__index = exports
 
-function exports.new<T...>(func: (T...) -> (), ...: T...)
+function exports.new<T...>(auto_start: boolean, func: (T...) -> (), ...: T...)
     local self = setmetatable({}, Thread)
 
     self._thread = coroutine.create(func)
     self._args = table.pack(...)
+
+    if auto_start then
+        self:Start()
+    end
 
     return self
 end
